@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf, WifiOff, Heart, Share2, Globe } from 'lucide-react';
+import { Leaf, Sparkles, Heart, Share2, Globe } from 'lucide-react';
 
 const Footer = ({ onNavigate }) => {
   return (
@@ -23,12 +23,12 @@ const Footer = ({ onNavigate }) => {
             </div>
             
             <p className="text-emerald-300/80 text-sm max-w-sm leading-relaxed">
-              Empowering farmers with instant, offline AI crop disease detection, localized treatment plans, and audio voice guidance.
+              Empowering farmers with instant AI crop disease detection, localized treatment plans, and audio voice guidance.
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-900/80 border border-emerald-800 text-xs font-semibold text-emerald-300">
-              <WifiOff className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Offline Edge Intelligence</span>
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Smart AI Vision Engine</span>
             </div>
           </div>
 
@@ -79,7 +79,7 @@ const Footer = ({ onNavigate }) => {
 
         {/* Bottom copyright line */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-emerald-400/80">
-          <p>© {new Date().getFullYear()} AgriVision. Built for offline agricultural resilience.</p>
+          <p>© {new Date().getFullYear()} AgriVision. Built for modern agricultural resilience.</p>
           <p className="flex items-center gap-1">
             <span>Made with</span>
             <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />

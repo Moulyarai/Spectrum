@@ -35,11 +35,11 @@ const AboutSection = ({ onNavigate }) => {
             </h2>
 
             <p className="text-base text-slate-600 leading-relaxed">
-              AgriVision was founded with a singular purpose: making advanced crop health diagnostics accessible to every farmer, regardless of internet connectivity or literacy barriers. Millions of smallholder farmers suffer yield losses due to delayed disease identification.
+              AgriVision was founded with a singular purpose: making advanced crop health diagnostics accessible to every farmer. Millions of smallholder farmers suffer yield losses due to delayed disease identification.
             </p>
 
             <p className="text-base text-slate-600 leading-relaxed">
-              By running optimized neural networks directly inside the web browser on affordable mobile devices, AgriVision provides zero-latency crop diagnosis without sending sensitive field data to external servers.
+              By running state-of-the-art neural networks directly on accessible devices, AgriVision provides zero-latency crop diagnosis, step-by-step treatment guidance, and regional audio advisories.
             </p>
 
             {/* Feature Highlights Grid */}
@@ -48,15 +48,15 @@ const AboutSection = ({ onNavigate }) => {
                 <ShieldCheck className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">Privacy First</h4>
-                  <p className="text-xs text-slate-600">All image processing stays on your device.</p>
+                  <p className="text-xs text-slate-600">Secure and confidential processing of field scans.</p>
                 </div>
               </div>
 
               <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-100 flex items-start gap-3">
                 <Cpu className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900">Edge AI Engine</h4>
-                  <p className="text-xs text-slate-600">Optimized for low-bandwidth mobile phones.</p>
+                  <h4 className="text-sm font-bold text-slate-900">Smart AI Engine</h4>
+                  <p className="text-xs text-slate-600">Optimized for fast, high-accuracy leaf scanning.</p>
                 </div>
               </div>
             </div>

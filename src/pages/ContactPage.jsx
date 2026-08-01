@@ -7,8 +7,8 @@ const ContactPage = () => {
 
   const faqs = [
     {
-      q: 'Does AgriVision require internet connection to scan leaves?',
-      a: 'No! Once you load the AgriVision web app for the first time, all AI disease detection models and treatment recommendations run 100% offline inside your phone browser.'
+      q: 'How does AgriVision AI disease detection work?',
+      a: 'AgriVision uses advanced computer vision models to analyze uploaded leaf photographs, identifying crop diseases and offering detailed treatment guides and voice advisories.'
     },
     {
       q: 'How does the Voice Guidance feature work?',

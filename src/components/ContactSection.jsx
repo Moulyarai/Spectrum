@@ -23,7 +23,7 @@ const ContactSection = () => {
             We Are Here To <span className="text-emerald-700">Help Your Farm</span>
           </h2>
           <p className="text-base sm:text-lg text-slate-600">
-            Have questions about offline setup, model updates, or crop diagnosis feedback? Get in touch with our agriculture tech team.
+            Have questions about crop diagnostics, AI model features, or agronomy feedback? Get in touch with our agriculture tech team.
           </p>
         </div>
 
@@ -139,7 +139,7 @@ const ContactSection = () => {
                     <textarea
                       rows="4"
                       required
-                      placeholder="Describe the leaf spots, crop age, or any offline feature issue..."
+                      placeholder="Describe the leaf spots, crop age, or any diagnostic query..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-sm"

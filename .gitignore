@@ -1,4 +1,6 @@
+# ==========================
 # Logs
+# ==========================
 logs
 *.log
 npm-debug.log*
@@ -7,18 +9,73 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# ==========================
+# Node.js
+# ==========================
+node_modules/
+dist/
+dist-ssr/
+
+# Environment files
+.env
+.env.*
 *.local
 
-# Editor directories and files
+# ==========================
+# VS Code / IDE
+# ==========================
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
+
+# ==========================
+# Operating System
+# ==========================
 .DS_Store
+Thumbs.db
+
+# ==========================
+# Visual Studio
+# ==========================
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+ml/.venv/
+.venv/
+venv/
+env/
+
+# Python cache
+.pytest_cache/
+.mypy_cache/
+
+# ==========================
+# Jupyter
+# ==========================
+.ipynb_checkpoints/
+
+# ==========================
+# TensorFlow / Training
+# ==========================
+*.ckpt
+*.index
+*.data-*
+*.pb
+
+# ==========================
+# Temporary files
+# ==========================
+*.tmp
+*.temp
+*.swp

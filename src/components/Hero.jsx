@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, ArrowRight, ShieldCheck, Volume2, WifiOff, Sparkles, CheckCircle2, Leaf, Cpu } from 'lucide-react';
+import { Upload, ArrowRight, ShieldCheck, Volume2, Sparkles, CheckCircle2, Leaf, Cpu } from 'lucide-react';
 
 const Hero = ({ onNavigate }) => {
   return (
@@ -17,18 +17,18 @@ const Hero = ({ onNavigate }) => {
             {/* Status Pill */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-emerald-200/80 shadow-xs text-xs sm:text-sm font-semibold text-emerald-900 animate-pulse-subtle">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <WifiOff className="w-4 h-4 text-emerald-600" />
-              <span>Zero Internet Required • Works Anywhere in the Field</span>
+              <Sparkles className="w-4 h-4 text-emerald-600" />
+              <span>Next-Gen AI Vision Engine • Instant Crop Health Diagnostics</span>
             </div>
 
             {/* Main Headline */}
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
                 Protect Your Crops With <br className="hidden sm:inline" />
-                <span className="agri-gradient-text">Offline AI Diagnosis</span>
+                <span className="agri-gradient-text">Smart AI Diagnosis</span>
               </h1>
               <p className="text-lg sm:text-xl text-slate-600 font-normal max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Empower your farm with instant crop disease detection. Simply upload a leaf image to receive instant treatment recommendations and spoken voice guidance—even without cellular coverage.
+                Empower your farm with instant AI crop disease detection. Simply upload a leaf image to receive precise treatment recommendations and localized spoken voice guidance.
               </p>
             </div>
 
@@ -59,11 +59,11 @@ const Hero = ({ onNavigate }) => {
               </div>
               <div>
                 <p className="text-2xl sm:text-3xl font-extrabold text-emerald-900">&lt; 1s</p>
-                <p className="text-xs text-slate-500 font-medium">Offline Scan Speed</p>
+                <p className="text-xs text-slate-500 font-medium">Instant AI Analysis</p>
               </div>
               <div>
                 <p className="text-2xl sm:text-3xl font-extrabold text-emerald-900">100%</p>
-                <p className="text-xs text-slate-500 font-medium">Privacy & Local Storage</p>
+                <p className="text-xs text-slate-500 font-medium">Secure & Confidential</p>
               </div>
             </div>
 
@@ -141,11 +141,11 @@ const Hero = ({ onNavigate }) => {
               {/* Decorative Leaf Badge */}
               <div className="absolute -bottom-6 -left-6 hidden sm:flex items-center gap-3 p-4 rounded-2xl bg-white shadow-xl border border-emerald-100 max-w-xs">
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-6 h-6" />
+                  <Cpu className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-900">Zero Cloud Dependency</p>
-                  <p className="text-[11px] text-slate-500">Models run natively inside your browser</p>
+                  <p className="text-xs font-bold text-slate-900">Advanced AI Diagnostics</p>
+                  <p className="text-[11px] text-slate-500">Real-time deep learning neural network</p>
                 </div>
               </div>
 

@@ -11,8 +11,8 @@ const HowItWorks = ({ onNavigate }) => {
     },
     {
       number: '02',
-      title: 'Instant Edge Analysis',
-      description: 'Our embedded lightweight neural network analyzes leaf spots, coloration, and vein patterns offline on your device.',
+      title: 'Instant AI Neural Analysis',
+      description: 'Our deep learning neural vision model analyzes leaf spots, coloration, and vein patterns with high precision.',
       icon: Cpu,
     },
     {
@@ -42,7 +42,7 @@ const HowItWorks = ({ onNavigate }) => {
             How <span className="text-emerald-700">AgriVision Works</span>
           </h2>
           <p className="text-base sm:text-lg text-slate-600">
-            No technical knowledge or active internet required. Designed for quick, intuitive operation in farming conditions.
+            Fast, accurate, and user-friendly. Designed for quick, intuitive operation in farming conditions.
           </p>
         </div>
 
@@ -88,7 +88,7 @@ const HowItWorks = ({ onNavigate }) => {
           <div className="space-y-2 text-center sm:text-left">
             <h3 className="text-2xl font-bold">Ready to test your crop leaves now?</h3>
             <p className="text-emerald-200 text-sm max-w-xl">
-              Upload any sample leaf image to test our offline AI diagnosis engine in action immediately.
+              Upload any sample leaf image to test our smart AI diagnosis engine in action immediately.
             </p>
           </div>
           <button

@@ -1,16 +1,16 @@
 import React from 'react';
-import { WifiOff, Volume2, Scan, Stethoscope, ArrowUpRight } from 'lucide-react';
+import { Sparkles, Volume2, Scan, Stethoscope, ArrowUpRight } from 'lucide-react';
 
 const Features = ({ onNavigate }) => {
   const featuresList = [
     {
-      id: 'offline-ai',
-      icon: WifiOff,
-      badge: 'Edge AI Technology',
-      title: '100% Offline AI Operation',
-      description: 'Works seamlessly in remote agricultural fields without cellular signal or active internet connection using lightweight edge models.',
+      id: 'ai-detection',
+      icon: Sparkles,
+      badge: 'Deep Vision AI',
+      title: 'Advanced AI Diagnostics',
+      description: 'Leverages neural vision models to analyze plant leaf health, identifying crop diseases with precision and speed.',
       color: 'emerald',
-      actionText: 'Explore Offline Tech'
+      actionText: 'Explore AI Engine'
     },
     {
       id: 'voice-guidance',
@@ -54,7 +54,7 @@ const Features = ({ onNavigate }) => {
             Designed Specifically For <span className="text-emerald-700">Farmers in the Field</span>
           </h2>
           <p className="text-base sm:text-lg text-slate-600">
-            AgriVision combines cutting-edge edge computer vision with accessibility features to protect crop yields everywhere.
+            AgriVision combines cutting-edge computer vision with accessibility features to protect crop yields everywhere.
           </p>
         </div>
 
