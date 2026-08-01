@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   Activity, CheckCircle2, AlertTriangle, Sparkles, Trash2, 
-  Eye, RefreshCw, Layers, ShieldCheck, Leaf
+  Eye, Layers, Leaf
 } from 'lucide-react';
-import { getScanHistory, deleteScanRecord, clearScanHistory, getDashboardStats } from '../utils/scanStorage';
+import { deleteScanRecord, clearScanHistory, getDashboardStats } from '../utils/scanStorage';
 import { getTranslation } from '../data/translations';
 
 const DashboardPage = ({ onNavigate, currentLang }) => {
@@ -16,10 +16,6 @@ const DashboardPage = ({ onNavigate, currentLang }) => {
   const refreshStats = () => {
     setStats(getDashboardStats());
   };
-
-  useEffect(() => {
-    refreshStats();
-  }, []);
 
   const handleDeleteScan = (id) => {
     deleteScanRecord(id);

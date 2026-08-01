@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   Leaf, Menu, X, LayoutDashboard, Info, PhoneCall, Scan, 
   CloudRain, Calendar 

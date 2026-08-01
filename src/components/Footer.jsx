@@ -1,5 +1,4 @@
-import React from 'react';
-import { Leaf, Sparkles, Heart, Share2, Globe } from 'lucide-react';
+import { Leaf, Sparkles, Heart } from 'lucide-react';
 
 const Footer = ({ onNavigate }) => {
   return (

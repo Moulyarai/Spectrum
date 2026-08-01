@@ -125,7 +125,7 @@ export const synthesizeAndPlayPiper = async ({
         engine: 'piper-python'
       };
     }
-  } catch (err) {
+  } catch {
     // Piper server unreachable -> proceed silently to WebSpeech API fallback
   }
 

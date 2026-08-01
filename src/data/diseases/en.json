@@ -3,8 +3,6 @@
     "diseaseKey": "tomato_early_blight",
     "name": "Tomato Early Blight",
     "crop": "Tomato",
-    "scientificName": "Alternaria solani",
-    "status": "Diseased",
     "description": "Early blight is a major fungal disease affecting tomato plants worldwide, causing foliage loss and significant crop damage if left untreated.",
     "symptoms": [
       "Concentric dark brown target-spot rings on older lower leaves.",
@@ -16,33 +14,25 @@
       "High humidity combined with warm temperatures (24°C - 29°C).",
       "Overhead irrigation causing foliage moisture."
     ],
-    "organicTreatment": [
-      "Spray Neem oil solution (5ml/L water) or copper soap biopesticide every 7-10 days.",
+    "treatment": [
       "Prune affected lower leaves and dispose of them outside the farm.",
-      "Mulch soil around base with straw to stop fungal spore splash."
+      "Spray Neem oil solution (5ml/L water) or copper soap biopesticide every 7-10 days.",
+      "Apply Mancozeb 75% WP or Chlorothalonil fungicide spray if severity increases."
     ],
-    "chemicalTreatment": [
-      "Apply Mancozeb 75% WP or Chlorothalonil fungicide spray.",
-      "Alternate active ingredients to prevent fungal resistance."
-    ],
-    "preventionTips": [
+    "prevention": [
       "Practice 3-year crop rotation with non-solanaceous crops.",
       "Use drip irrigation instead of sprinkler systems.",
       "Maintain adequate spacing between plants for ventilation."
     ],
     "recommendedFertilizer": "Potassium-rich organic compost and balanced N-P-K (10-10-10) with micronutrients.",
     "waterRequirement": "Moderate drip irrigation twice a week (avoid wetting foliage).",
-    "precautions": "Avoid handling plants when leaves are wet to prevent spreading spores.",
-    "immediateAction": "Isolate the plant, cut off heavily infected bottom foliage immediately, and apply organic neem oil.",
-    "speechText": "Diagnosis: Tomato Early Blight. Scientific name: Alternaria solani. Symptoms include dark brown concentric spots and yellowing leaves. Organic treatment: Prune lower leaves and apply neem oil. Chemical treatment: Apply Mancozeb or Chlorothalonil."
+    "speechText": "Diagnosis: Tomato Early Blight on Tomato crop. Symptoms include dark brown concentric spots and yellowing leaves. Treatment: Prune lower leaves and apply neem oil or copper fungicide."
   },
   "corn_common_rust": {
     "diseaseKey": "corn_common_rust",
     "name": "Corn Common Rust",
     "crop": "Corn / Maize",
-    "scientificName": "Puccinia sorghi",
-    "status": "Diseased",
-    "description": "Common rust is a airborne fungal disease in maize characterized by reddish-brown pustules on leaves.",
+    "description": "Common rust is an airborne fungal disease in maize characterized by reddish-brown pustules on leaves.",
     "symptoms": [
       "Small cinnamon-brown pustules on both upper and lower leaf surfaces.",
       "Powdery rust spores rubbing off easily on touch.",
@@ -52,29 +42,22 @@
       "Wind-blown urediniospores from infected host crops.",
       "Cool temperatures (16°C - 23°C) and heavy dew exposure."
     ],
-    "organicTreatment": [
+    "treatment": [
       "Dust sulfur powder or spray bio-fungicide containing Bacillus subtilis.",
-      "Ensure proper crop spacing and weed management."
-    ],
-    "chemicalTreatment": [
       "Apply Azoxystrobin or Propiconazole foliar sprays if canopy coverage exceeds 10%."
     ],
-    "preventionTips": [
+    "prevention": [
       "Plant rust-resistant hybrid corn cultivars.",
       "Destroy leftover crop residue promptly after harvest."
     ],
     "recommendedFertilizer": "Balanced Nitrogen and Potash soil application.",
     "waterRequirement": "Regular furrow irrigation with good field drainage.",
-    "precautions": "Do not over-fertilize with excessive nitrogen.",
-    "immediateAction": "Monitor canopy rust density. If pustules spread rapidly, apply sulfur or recommended foliar fungicide.",
-    "speechText": "Diagnosis: Corn Common Rust. Scientific name: Puccinia sorghi. Symptoms include cinnamon brown pustules. Organic treatment: Dust sulfur or Bacillus subtilis. Chemical treatment: Apply Azoxystrobin spray."
+    "speechText": "Diagnosis: Corn Common Rust on Corn crop. Symptoms include cinnamon brown pustules. Treatment: Dust sulfur or spray Azoxystrobin."
   },
   "potato_late_blight": {
     "diseaseKey": "potato_late_blight",
     "name": "Potato Late Blight",
     "crop": "Potato",
-    "scientificName": "Phytophthora infestans",
-    "status": "Diseased",
     "description": "Late blight is an aggressive oomycete pathogen capable of destroying entire potato crops rapidly in damp weather.",
     "symptoms": [
       "Water-soaked dark green to black leaf spots starting at leaf tips.",
@@ -92,22 +75,48 @@
     "chemicalTreatment": [
       "Spray Metalaxyl + Mancozeb or Dimethomorph systemic fungicide."
     ],
-    "preventionTips": [
+    "treatment": [
+      "Apply Copper hydroxide biopesticide or Bordeaux mixture thoroughly.",
+      "Spray Metalaxyl + Mancozeb systemic fungicide for severe infections."
+    ],
+    "prevention": [
       "Plant only certified disease-free seed tubers.",
       "Hill up soil high around plant bases to shield developing tubers from spores."
     ],
     "recommendedFertilizer": "Phosphorus-rich fertilizer with bio-extracts.",
     "waterRequirement": "Soil moist but well-drained. Avoid waterlogging.",
-    "precautions": "Destroy infected haulms before harvesting tubers.",
-    "immediateAction": "Immediately remove infected plants and spray copper or systemic fungicides across the plot.",
-    "speechText": "Diagnosis: Potato Late Blight. Scientific name: Phytophthora infestans. Symptoms: Water soaked dark leaf spots with white underside mold. Organic treatment: Apply copper hydroxide. Chemical treatment: Spray Metalaxyl with Mancozeb."
+    "speechText": "Diagnosis: Potato Late Blight on Potato crop. Symptoms: Water soaked dark leaf spots with white underside mold. Treatment: Apply copper hydroxide or Metalaxyl spray."
+  },
+  "arecanut_leaf_spot": {
+    "diseaseKey": "arecanut_leaf_spot",
+    "name": "Arecanut Yellow Leaf Spot",
+    "crop": "Arecanut (Supari)",
+    "description": "Yellow leaf spot disease in Arecanut palms affects green fronds, reducing chlorophyll content and nut yield.",
+    "symptoms": [
+      "Yellowing of lower fronds spreading towards inner leaves.",
+      "Dark brown necrotic spots with chlorotic yellow borders.",
+      "Drying and drooping of mature palm fronds."
+    ],
+    "causes": [
+      "Colletotrichum gloeosporioides fungal infection.",
+      "Poor soil drainage and micronutrient deficiencies (Zinc & Boron)."
+    ],
+    "treatment": [
+      "Spray Bordeaux mixture (1%) or Copper Oxychloride (0.3%) on fronds.",
+      "Apply bio-control agent Trichoderma viride around palm root zone."
+    ],
+    "prevention": [
+      "Ensure proper drainage channels in palm plantations.",
+      "Apply recommended micronutrient mixtures and organic manure annually."
+    ],
+    "recommendedFertilizer": "Organic compost + Neem cake + 500g N, 200g P2O5, 750g K2O per palm annually.",
+    "waterRequirement": "Regular basin irrigation during dry months.",
+    "speechText": "Diagnosis: Arecanut Yellow Leaf Spot on Arecanut crop. Symptoms include yellow fronds and brown spots. Treatment: Spray Bordeaux mixture and apply Trichoderma to root zone."
   },
   "healthy_crop": {
     "diseaseKey": "healthy_crop",
     "name": "Healthy Crop Leaf",
     "crop": "General Crop",
-    "scientificName": "No Pathogen Detected",
-    "status": "Healthy",
     "description": "The leaf shows vibrant pigmentation, healthy cellular structure, and zero signs of fungal, bacterial, or pest infection.",
     "symptoms": [
       "Vibrant uniform leaf green color.",
@@ -117,21 +126,16 @@
     "causes": [
       "Good agricultural practices, balanced nutrition, and optimal moisture."
     ],
-    "organicTreatment": [
+    "treatment": [
       "No chemical or organic disease treatment required.",
       "Maintain organic soil compost and vermicompost application."
     ],
-    "chemicalTreatment": [
-      "None needed. Protect beneficial soil organisms."
-    ],
-    "preventionTips": [
+    "prevention": [
       "Continue regular crop field monitoring every 3-5 days.",
       "Ensure proper weed control and crop sanitation."
     ],
     "recommendedFertilizer": "Organic vermicompost or liquid bio-fertilizer every 3 weeks.",
     "waterRequirement": "Standard crop-specific irrigation schedule.",
-    "precautions": "Avoid over-watering and maintain proper soil aeration.",
-    "immediateAction": "No treatment required! Continue routine healthy crop care.",
     "speechText": "Great news! Your crop leaf is completely healthy with no disease detected. Continue regular watering and compost care."
   }
 }

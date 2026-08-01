@@ -1,0 +1,22 @@
+{
+  "0": {
+    "folder": "Corn_(maize)___Common_rust_",
+    "crop": "Corn",
+    "disease": "Corn (maize) - Common rust "
+  },
+  "1": {
+    "folder": "Potato___Late_blight",
+    "crop": "Potato",
+    "disease": "Potato - Late blight"
+  },
+  "2": {
+    "folder": "Tomato___Early_blight",
+    "crop": "Tomato",
+    "disease": "Tomato - Early blight"
+  },
+  "3": {
+    "folder": "Tomato___Healthy",
+    "crop": "Tomato",
+    "disease": "Tomato - Healthy"
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { CloudRain, Thermometer, Droplets, MapPin, Search, Sparkles, ShieldAlert } from 'lucide-react';
 import { sampleCitiesWeather, getWeatherAdvisory } from '../data/weatherData';
 import { getTranslation } from '../data/translations';

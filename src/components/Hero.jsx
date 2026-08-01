@@ -1,5 +1,4 @@
-import React from 'react';
-import { Upload, ArrowRight, ShieldCheck, Volume2, Sparkles, CheckCircle2, Leaf, Cpu } from 'lucide-react';
+import { Upload, ArrowRight, Volume2, Sparkles, Leaf, Cpu } from 'lucide-react';
 
 const Hero = ({ onNavigate }) => {
   return (

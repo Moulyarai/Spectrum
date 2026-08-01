@@ -1,5 +1,4 @@
-import React from 'react';
-import { Leaf, Cpu, Sparkles, ShieldCheck, Volume2, Globe, Users, Target } from 'lucide-react';
+import { Sparkles, Volume2, Target } from 'lucide-react';
 
 const AboutPage = ({ onNavigate }) => {
   return (

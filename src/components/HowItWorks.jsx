@@ -1,4 +1,3 @@
-import React from 'react';
 import { Camera, Cpu, Volume2, CheckCircle2, ArrowRight } from 'lucide-react';
 
 const HowItWorks = ({ onNavigate }) => {

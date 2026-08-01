@@ -1,12 +1,11 @@
-import React from 'react';
-import { Globe, Check } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { availableLanguages } from '../data/translations';
 
 const LanguageSelector = ({ selectedLang, onChangeLang, compact = false }) => {
   return (
     <div className="relative inline-block text-left">
       <div className="flex items-center gap-2">
-        <Globe className="w-4 h-4 text-emerald-700" />
+        {!compact && <Globe className="w-4 h-4 text-emerald-700" />}
         <select
           value={selectedLang}
           onChange={(e) => onChangeLang(e.target.value)}

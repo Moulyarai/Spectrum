@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ContactSection from '../components/ContactSection';
 import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 

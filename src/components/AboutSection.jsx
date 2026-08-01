@@ -1,5 +1,4 @@
-import React from 'react';
-import { ShieldCheck, Cpu, HeartHandshake, Award } from 'lucide-react';
+import { ShieldCheck, Cpu } from 'lucide-react';
 
 const AboutSection = ({ onNavigate }) => {
   return (

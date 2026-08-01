@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { 
   Upload, Camera, Volume2, ShieldAlert, CheckCircle2, RefreshCw, 
-  FileText, Play, Square, AlertCircle, Leaf, Sparkles, X, Droplets, 
-  Sprout, HelpCircle, Activity, Info
+  Play, Square, AlertCircle, Leaf, Sparkles, X, Droplets,
+  Sprout, HelpCircle, Info
 } from 'lucide-react';
 import LanguageSelector from '../components/LanguageSelector';
 import { getTranslation } from '../data/translations';
@@ -22,6 +22,7 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [lowConfidenceWarning, setLowConfidenceWarning] = useState(false);
+  const [unsupportedCropWarning, setUnsupportedCropWarning] = useState(false);
 
   const videoRef = useRef(null);
   const mediaStreamRef = useRef(null);
@@ -29,7 +30,6 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
   const activeLang = currentLang === 'hi' ? 'hi' : 'en';
   const t = getTranslation(activeLang);
 
-  // Disease database based on language
   const diseaseDb = activeLang === 'hi' ? hiDiseaseData : enDiseaseData;
 
   const samplePresets = [
@@ -55,33 +55,20 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
       confidence: 96.1
     },
     {
-      id: 'healthy-leaf',
-      diseaseKey: 'healthy_crop',
-      name: activeLang === 'hi' ? 'स्वस्थ पत्ती (Healthy Leaf)' : 'Healthy Leaf',
+      id: 'arecanut-spot',
+      diseaseKey: 'arecanut_leaf_spot',
+      name: activeLang === 'hi' ? 'सुपारी (Yellow Spot)' : 'Arecanut (Yellow Spot)',
       img: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80',
-      confidence: 99.2
+      confidence: 93.5
     },
     {
-      id: 'low-conf-sample',
-      diseaseKey: 'tomato_early_blight',
-      name: activeLang === 'hi' ? 'धुंधली फोटो (कम कॉन्फिडेंस 52%)' : 'Blurry Image (Low 52%)',
+      id: 'unsupported-sample',
+      diseaseKey: 'unsupported_crop',
+      name: activeLang === 'hi' ? 'असमर्थित फसल (Mango)' : 'Unsupported Crop (Mango)',
       img: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80',
-      confidence: 52.0
+      confidence: 40.0
     }
   ];
-
-  useEffect(() => {
-    stopOfflineSpeech();
-    setIsPlayingAudio(false);
-    setFallbackWarning(null);
-  }, [activeLang]);
-
-  // Clean up camera stream on unmount
-  useEffect(() => {
-    return () => {
-      stopCamera();
-    };
-  }, []);
 
   const stopCamera = () => {
     if (mediaStreamRef.current) {
@@ -90,6 +77,20 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
     }
     setIsCameraActive(false);
   };
+
+  useEffect(() => {
+    stopOfflineSpeech();
+    setTimeout(() => {
+      setIsPlayingAudio(false);
+      setFallbackWarning(null);
+    }, 0);
+  }, [activeLang]);
+
+  useEffect(() => {
+    return () => {
+      stopCamera();
+    };
+  }, []);
 
   const startCamera = async () => {
     try {
@@ -114,7 +115,12 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
       ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
       const dataUrl = canvas.toDataURL('image/jpeg');
       stopCamera();
-      runMockAnalysis(dataUrl, 'tomato_early_blight', 96.5);
+
+      canvas.toBlob((blob) => {
+        if (blob) {
+          analyzeUploadedImage(blob, dataUrl);
+        }
+      }, 'image/jpeg');
     }
   };
 
@@ -122,7 +128,7 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
     const file = e.target.files && e.target.files[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
-      runMockAnalysis(imageURL, 'tomato_early_blight', 95.8);
+      analyzeUploadedImage(file, imageURL);
     }
   };
 
@@ -132,59 +138,97 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
       const imageURL = URL.createObjectURL(file);
-      runMockAnalysis(imageURL, 'tomato_early_blight', 95.8);
+      analyzeUploadedImage(file, imageURL);
     }
   };
 
-  const handleSelectSample = (sample) => {
-    runMockAnalysis(sample.img, sample.diseaseKey, sample.confidence);
+  const handleSelectSample = async (sample) => {
+    try {
+      const res = await fetch(sample.img);
+      const blob = await res.blob();
+      analyzeUploadedImage(blob, sample.img);
+    } catch {
+      analyzeUploadedImage(null, sample.img);
+    }
   };
 
-  const runMockAnalysis = (image, diseaseKey, confidence) => {
+  const analyzeUploadedImage = async (fileOrBlob, previewUrl) => {
     stopOfflineSpeech();
     setIsPlayingAudio(false);
     setFallbackWarning(null);
-    setSelectedImage(image);
+    setSelectedImage(previewUrl);
     setIsAnalyzing(true);
-    setProgress(15);
+    setProgress(20);
     setLowConfidenceWarning(false);
+    setUnsupportedCropWarning(false);
 
-    // Progress animation
     const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 90) {
-          clearInterval(interval);
-          return 90;
-        }
-        return prev + 25;
-      });
-    }, 200);
+      setProgress(prev => (prev >= 90 ? 90 : prev + 20));
+    }, 150);
 
-    setTimeout(() => {
+    try {
+      const formData = new FormData();
+      if (fileOrBlob) {
+        formData.append('file', fileOrBlob, 'leaf_upload.jpg');
+      }
+
+      const response = await fetch('http://localhost:5000/api/predict', {
+        method: 'POST',
+        body: formData
+      });
+
       clearInterval(interval);
       setProgress(100);
-      setIsAnalyzing(false);
-      setActiveDiseaseKey(diseaseKey);
-      setConfidenceScore(confidence);
 
-      if (confidence < 60) {
-        setLowConfidenceWarning(true);
-      } else {
-        // Record scan into localStorage history
-        const info = diseaseDb[diseaseKey] || diseaseDb['healthy_crop'];
-        saveScanRecord({
-          id: 'scan-' + Date.now(),
-          date: new Date().toLocaleString(activeLang === 'hi' ? 'hi-IN' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' }),
-          timestamp: Date.now(),
-          crop: info.crop,
-          diseaseName: info.name,
-          diseaseKey: diseaseKey,
-          confidence: confidence,
-          status: info.status,
-          img: image
-        });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Server error ${response.status}`);
       }
-    }, 900);
+
+      const result = await response.json();
+      setIsAnalyzing(false);
+
+      if (result.is_supported === false || result.crop === 'Unknown') {
+        setUnsupportedCropWarning(true);
+        return;
+      }
+
+      // The backend owns the configurable threshold. Do not apply a second,
+      // hard-coded 60% check that can turn a valid prediction into a warning.
+      if (result.low_confidence) {
+        setLowConfidenceWarning(true);
+        setConfidenceScore(result.confidence);
+        return;
+      }
+
+      const dKey = result.disease_key || 'healthy_crop';
+      setActiveDiseaseKey(dKey);
+      setConfidenceScore(result.confidence);
+
+      const info = diseaseDb[dKey] || {
+        crop: result.crop,
+        name: result.disease,
+        status: 'Diseased'
+      };
+
+      saveScanRecord({
+        id: 'scan-' + Date.now(),
+        date: new Date().toLocaleString(activeLang === 'hi' ? 'hi-IN' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' }),
+        timestamp: Date.now(),
+        crop: result.crop || info.crop,
+        diseaseName: result.disease || info.name,
+        diseaseKey: dKey,
+        confidence: result.confidence,
+        status: info.status || 'Diseased',
+        img: previewUrl
+      });
+
+    } catch (err) {
+      clearInterval(interval);
+      setIsAnalyzing(false);
+      console.error('Prediction error:', err);
+      alert(`AI Prediction Error: ${err.message}\nMake sure backend Python server is running on http://localhost:5000`);
+    }
   };
 
   const handleRemoveImage = () => {
@@ -192,6 +236,7 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
     setActiveDiseaseKey(null);
     setIsAnalyzing(false);
     setLowConfidenceWarning(false);
+    setUnsupportedCropWarning(false);
     stopOfflineSpeech();
     setIsPlayingAudio(false);
   };
@@ -241,13 +286,13 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 pb-6 border-b border-emerald-100">
           <div className="text-center md:text-left space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" /> AI Crop Vision & Voice Advisory
+              <Sparkles className="w-3.5 h-3.5" /> Multi-Crop Vision & Voice Advisory
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              {activeLang === 'hi' ? 'फसल बीमारी पहचान' : 'Crop Disease Diagnostics'}
+              {activeLang === 'hi' ? 'बहु-फसल बीमारी निदान' : 'Multi-Crop Disease Diagnostics'}
             </h1>
             <p className="text-slate-600 text-sm">
-              Upload or capture a crop leaf image for immediate AI diagnosis, detailed recommendations, and voice guidance.
+              Upload crop foliage for automatic crop species recognition and disease classification.
             </p>
           </div>
 
@@ -262,7 +307,7 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
           <div className="mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 flex items-start gap-3 shadow-xs animate-in fade-in">
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div className="text-xs sm:text-sm font-medium">
-              <p className="font-bold">Voice Synthesis Notice:</p>
+              <p className="font-bold">Voice Notice:</p>
               <p>{fallbackWarning}</p>
             </div>
           </div>
@@ -274,7 +319,6 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
           {/* Left Column: Upload, Camera, Preview, Presets */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Camera View Modal / Container */}
             {isCameraActive ? (
               <div className="bg-slate-900 p-4 rounded-3xl text-white shadow-lg space-y-4 relative">
                 <video ref={videoRef} autoPlay playsInline className="w-full h-64 object-cover rounded-2xl bg-black" />
@@ -294,7 +338,6 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                 </div>
               </div>
             ) : selectedImage ? (
-              /* Image Preview Box with Remove Button */
               <div className="bg-white p-6 rounded-3xl border border-emerald-200 shadow-sm relative text-center space-y-4">
                 <div className="relative inline-block w-full">
                   <img
@@ -321,7 +364,6 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                 </div>
               </div>
             ) : (
-              /* Drag & Drop Upload Zone */
               <div
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
                 onDragLeave={() => setDragOver(false)}
@@ -347,7 +389,7 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                       {t.ui.dragDropText}
                     </p>
                     <p className="text-xs text-slate-500 mt-1">
-                      Supports PNG, JPG, JPEG up to 10MB
+                      Supports Tomato, Potato, Corn, Pepper, Arecanut, Grape, Apple, etc.
                     </p>
                   </div>
 
@@ -367,10 +409,10 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
               </div>
             )}
 
-            {/* Quick Test Sample Presets */}
+            {/* Presets */}
             <div className="bg-white p-6 rounded-3xl border border-emerald-100 shadow-xs space-y-4">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-600" /> {t.ui.samplePreset}:
+                <Sparkles className="w-4 h-4 text-emerald-600" /> Multi-Crop Sample Presets:
               </h3>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -379,7 +421,7 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                     key={sample.id}
                     onClick={() => handleSelectSample(sample)}
                     className={`p-2 rounded-xl border transition-all text-left group flex flex-col items-center text-center ${
-                      activeDiseaseKey === sample.diseaseKey && confidenceScore === sample.confidence
+                      activeDiseaseKey === sample.diseaseKey
                         ? 'border-emerald-600 bg-emerald-50 shadow-sm'
                         : 'border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/40'
                     }`}
@@ -397,11 +439,10 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
 
           </div>
 
-          {/* Right Column: Prediction UI & Detailed Report */}
+          {/* Right Column: Results without Scientific Name */}
           <div className="lg:col-span-7">
             <div className="bg-white p-6 sm:p-8 rounded-3xl border border-emerald-100 shadow-lg min-h-[520px] flex flex-col justify-between">
               
-              {/* Empty State */}
               {!selectedImage && !isAnalyzing && (
                 <div className="my-auto text-center py-16 space-y-4">
                   <div className="w-20 h-20 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
@@ -409,12 +450,11 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                   </div>
                   <h3 className="text-xl font-bold text-slate-900">No Leaf Scanned Yet</h3>
                   <p className="text-slate-500 text-sm max-w-sm mx-auto">
-                    Upload a leaf photograph or select a sample preset on the left to view full diagnostics and recommendations.
+                    Upload a leaf photograph to analyze crop species and diagnose disease.
                   </p>
                 </div>
               )}
 
-              {/* Loading & Progress Animation */}
               {isAnalyzing && (
                 <div className="my-auto text-center py-16 space-y-6">
                   <div className="w-20 h-20 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto animate-spin">
@@ -434,8 +474,30 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                 </div>
               )}
 
-              {/* Low Confidence Warning (<60%) */}
-              {lowConfidenceWarning && !isAnalyzing && (
+              {/* Unsupported Crop Message (Requirement #7) */}
+              {unsupportedCropWarning && !isAnalyzing && (
+                <div className="my-auto p-8 rounded-3xl bg-red-50 border-2 border-red-200 text-red-900 space-y-4 text-center">
+                  <AlertCircle className="w-14 h-14 text-red-600 mx-auto" />
+                  <div>
+                    <h4 className="text-xl font-extrabold text-red-950">Crop Recognition Notice</h4>
+                    <p className="text-base font-bold text-red-800 mt-2">
+                      This crop is currently not supported by the trained model.
+                    </p>
+                    <p className="text-xs text-red-600 mt-2">
+                      This trained model currently supports Tomato, Potato, and Corn leaf classes.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleRemoveImage}
+                    className="px-6 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white font-bold text-xs shadow-md"
+                  >
+                    Upload Supported Crop Leaf
+                  </button>
+                </div>
+              )}
+
+              {/* Low Confidence Warning */}
+              {lowConfidenceWarning && !isAnalyzing && !unsupportedCropWarning && (
                 <div className="my-auto p-6 rounded-3xl bg-amber-50 border-2 border-amber-300 text-amber-900 space-y-4 text-center">
                   <AlertCircle className="w-12 h-12 text-amber-600 mx-auto" />
                   <div>
@@ -453,11 +515,11 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                 </div>
               )}
 
-              {/* Full Detailed Report & Recommendations */}
-              {diseaseData && !isAnalyzing && !lowConfidenceWarning && (
-                <div className="space-y-8 animate-in fade-in duration-300">
+              {/* Exact Fields Requested: Crop Name, Disease Name, Confidence, Symptoms, Causes, Treatment, Prevention, Fertilizer, Water */}
+              {diseaseData && !isAnalyzing && !unsupportedCropWarning && !lowConfidenceWarning && (
+                <div className="space-y-6 animate-in fade-in duration-300">
                   
-                  {/* Top Result Banner */}
+                  {/* Top Result Banner (Scientific Name Removed) */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
                     <div className="flex items-center gap-4">
                       <img
@@ -467,25 +529,16 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                       />
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                            {diseaseData.crop}
-                          </span>
-                          <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
-                            diseaseData.status === 'Healthy' || diseaseData.diseaseKey === 'healthy_crop' 
-                              ? 'bg-emerald-100 text-emerald-900' 
-                              : 'bg-red-100 text-red-900'
-                          }`}>
-                            {diseaseData.status === 'Healthy' ? t.ui.healthy : t.ui.diseased}
+                          <span className="text-xs font-extrabold text-emerald-900 bg-emerald-100 px-3 py-1 rounded-full uppercase">
+                            {t.ui.cropName}: {diseaseData.crop}
                           </span>
                         </div>
-                        <h3 className="text-xl font-extrabold text-slate-900 mt-1">
+                        <h3 className="text-xl font-black text-slate-900 mt-1">
                           {diseaseData.name}
                         </h3>
-                        <p className="text-xs text-slate-500 italic">{diseaseData.scientificName}</p>
                       </div>
                     </div>
 
-                    {/* Confidence Meter Circular / Animated Progress */}
                     <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 flex items-center gap-3 shrink-0">
                       <div className="relative w-14 h-14 flex items-center justify-center">
                         <svg className="w-14 h-14 transform -rotate-90">
@@ -504,7 +557,7 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                       </div>
                       <div>
                         <span className="text-xs font-bold text-slate-700 block">{t.ui.confidence}</span>
-                        <span className="text-[11px] text-emerald-700 font-semibold">High Accuracy</span>
+                        <span className="text-[11px] text-emerald-700 font-semibold">High Certainty</span>
                       </div>
                     </div>
                   </div>
@@ -539,102 +592,73 @@ const DetectDiseasePage = ({ currentLang, setCurrentLang }) => {
                     </p>
                   </div>
 
-                  {/* Detailed Disease Report Tabs / Sections */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Requested Fields Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                     
                     {/* Symptoms */}
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                        <ShieldAlert className="w-4 h-4 text-amber-600" /> {t.ui.symptoms}:
-                      </h4>
-                      <ul className="space-y-1.5">
-                        {diseaseData.symptoms.map((item, idx) => (
-                          <li key={idx} className="text-xs text-slate-700 bg-amber-50/70 p-2.5 rounded-xl border border-amber-200/70 flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
+                    <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-1">
+                      <span className="font-bold text-amber-900 uppercase block flex items-center gap-1.5">
+                        <ShieldAlert className="w-4 h-4 text-amber-600" /> {t.ui.symptoms}
+                      </span>
+                      <ul className="list-disc list-inside text-amber-800 space-y-1 mt-1">
+                        {diseaseData.symptoms.map((item, idx) => <li key={idx}>{item}</li>)}
                       </ul>
                     </div>
 
                     {/* Causes */}
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                        <HelpCircle className="w-4 h-4 text-purple-600" /> {t.ui.causes}:
-                      </h4>
-                      <ul className="space-y-1.5">
-                        {diseaseData.causes.map((item, idx) => (
-                          <li key={idx} className="text-xs text-slate-700 bg-purple-50/70 p-2.5 rounded-xl border border-purple-200/70 flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 mt-1.5 shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
+                    <div className="p-4 rounded-2xl bg-purple-50/80 border border-purple-200 space-y-1">
+                      <span className="font-bold text-purple-900 uppercase block flex items-center gap-1.5">
+                        <HelpCircle className="w-4 h-4 text-purple-600" /> {t.ui.causes}
+                      </span>
+                      <ul className="list-disc list-inside text-purple-800 space-y-1 mt-1">
+                        {diseaseData.causes.map((item, idx) => <li key={idx}>{item}</li>)}
                       </ul>
                     </div>
 
-                  </div>
-
-                  {/* Farmer Recommendations Section */}
-                  <div className="space-y-4 pt-4 border-t border-slate-100">
-                    <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                      <Sprout className="w-5 h-5 text-emerald-700" /> {t.ui.farmerRecommendations}
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      
-                      {/* Immediate Action */}
-                      <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-1">
-                        <span className="text-xs font-bold text-amber-900 uppercase block">{t.ui.immediateAction}</span>
-                        <p className="text-xs text-amber-800">{diseaseData.immediateAction}</p>
-                      </div>
-
-                      {/* Organic Treatment */}
-                      <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1">
-                        <span className="text-xs font-bold text-emerald-900 uppercase block">{t.ui.organicTreatment}</span>
-                        <ul className="list-disc list-inside text-xs text-emerald-800 space-y-1">
-                          {diseaseData.organicTreatment.map((opt, i) => <li key={i}>{opt}</li>)}
-                        </ul>
-                      </div>
-
-                      {/* Chemical Treatment */}
-                      <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 space-y-1">
-                        <span className="text-xs font-bold text-blue-900 uppercase block">{t.ui.chemicalTreatment}</span>
-                        <ul className="list-disc list-inside text-xs text-blue-800 space-y-1">
-                          {diseaseData.chemicalTreatment.map((opt, i) => <li key={i}>{opt}</li>)}
-                        </ul>
-                      </div>
-
-                      {/* Recommended Fertilizer */}
-                      <div className="p-4 rounded-2xl bg-lime-50 border border-lime-200 space-y-1">
-                        <span className="text-xs font-bold text-lime-900 uppercase block">{t.ui.recommendedFertilizer}</span>
-                        <p className="text-xs text-lime-800">{diseaseData.recommendedFertilizer}</p>
-                      </div>
-
-                      {/* Water Requirement */}
-                      <div className="p-4 rounded-2xl bg-cyan-50 border border-cyan-200 space-y-1">
-                        <span className="text-xs font-bold text-cyan-900 uppercase block">{t.ui.waterRequirement}</span>
-                        <p className="text-xs text-cyan-800">{diseaseData.waterRequirement}</p>
-                      </div>
-
-                      {/* Prevention Tips */}
-                      <div className="p-4 rounded-2xl bg-purple-50 border border-purple-200 space-y-1">
-                        <span className="text-xs font-bold text-purple-900 uppercase block">{t.ui.prevention}</span>
-                        <ul className="list-disc list-inside text-xs text-purple-800 space-y-1">
-                          {diseaseData.preventionTips.map((opt, i) => <li key={i}>{opt}</li>)}
-                        </ul>
-                      </div>
-
+                    {/* Treatment */}
+                    <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-1 md:col-span-2">
+                      <span className="font-bold text-emerald-900 uppercase block flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Treatment
+                      </span>
+                      <ul className="list-disc list-inside text-emerald-800 space-y-1 mt-1">
+                        {diseaseData.treatment.map((item, idx) => <li key={idx}>{item}</li>)}
+                      </ul>
                     </div>
+
+                    {/* Prevention */}
+                    <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 space-y-1">
+                      <span className="font-bold text-blue-900 uppercase block flex items-center gap-1.5">
+                        <Info className="w-4 h-4 text-blue-600" /> {t.ui.prevention}
+                      </span>
+                      <ul className="list-disc list-inside text-blue-800 space-y-1 mt-1">
+                        {diseaseData.prevention.map((item, idx) => <li key={idx}>{item}</li>)}
+                      </ul>
+                    </div>
+
+                    {/* Fertilizer Recommendation */}
+                    <div className="p-4 rounded-2xl bg-lime-50/80 border border-lime-200 space-y-1">
+                      <span className="font-bold text-lime-900 uppercase block flex items-center gap-1.5">
+                        <Sprout className="w-4 h-4 text-lime-600" /> {t.ui.recommendedFertilizer}
+                      </span>
+                      <p className="text-lime-800 mt-1">{diseaseData.recommendedFertilizer}</p>
+                    </div>
+
+                    {/* Water Requirement */}
+                    <div className="p-4 rounded-2xl bg-cyan-50/80 border border-cyan-200 space-y-1 md:col-span-2">
+                      <span className="font-bold text-cyan-900 uppercase block flex items-center gap-1.5">
+                        <Droplets className="w-4 h-4 text-cyan-600" /> {t.ui.waterRequirement}
+                      </span>
+                      <p className="text-cyan-800 mt-1">{diseaseData.waterRequirement}</p>
+                    </div>
+
                   </div>
 
-                  {/* Footer buttons */}
-                  <div className="pt-4 flex justify-between items-center border-t border-slate-100">
-                    <span className="text-xs text-slate-400">Scan automatically saved to local history.</span>
+                  <div className="pt-4 flex justify-end">
                     <button
                       onClick={handleRemoveImage}
                       className="px-4 py-2 text-xs font-bold text-slate-600 hover:text-emerald-800"
                     >
-                      {t.ui.scanAnother}
+                      Scan Another Leaf
                     </button>
                   </div>
 

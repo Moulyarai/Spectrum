@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sparkles, Volume2, Scan, Stethoscope, ArrowUpRight } from 'lucide-react';
 
 const Features = ({ onNavigate }) => {

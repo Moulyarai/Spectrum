@@ -1,5 +1,4 @@
-import React from 'react';
-import { Calendar, Sprout, Droplet, Clock, CheckCircle2 } from 'lucide-react';
+import { Calendar, Sprout, Droplet, Clock } from 'lucide-react';
 import { cropCalendarData } from '../data/cropCalendarData';
 import { getTranslation } from '../data/translations';
 
