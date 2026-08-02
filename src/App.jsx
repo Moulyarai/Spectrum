@@ -10,7 +10,7 @@ import Footer from './components/Footer';
 // Standalone Page Views
 import DetectDiseasePage from './pages/DetectDiseasePage';
 import DashboardPage from './pages/DashboardPage';
-import WeatherPage from './pages/WeatherPage';
+import PesticideSubsidyAdvisorPage from './pages/PesticideSubsidyAdvisorPage';
 import CropCalendarPage from './pages/CropCalendarPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -53,7 +53,7 @@ function App() {
           />
         )}
         {activeTab === 'dashboard' && <DashboardPage onNavigate={handleNavigate} currentLang={currentLang} />}
-        {activeTab === 'weather' && <WeatherPage currentLang={currentLang} />}
+        {activeTab === 'advisor' && <PesticideSubsidyAdvisorPage currentLang={currentLang} />}
         {activeTab === 'calendar' && <CropCalendarPage currentLang={currentLang} />}
         {activeTab === 'about' && <AboutPage onNavigate={handleNavigate} />}
         {activeTab === 'contact' && <ContactPage />}

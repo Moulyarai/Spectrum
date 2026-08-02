@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { 
   Leaf, Menu, X, LayoutDashboard, Info, PhoneCall, Scan, 
-  CloudRain, Calendar 
+  ShieldCheck, Calendar
 } from 'lucide-react';
 import LanguageSelector from './LanguageSelector';
 import { getTranslation } from '../data/translations';
@@ -15,7 +15,7 @@ const Navbar = ({ activeTab, setActiveTab, currentLang, setCurrentLang }) => {
     { id: 'home', label: t.nav.home || 'Home', icon: Leaf },
     { id: 'detect', label: t.nav.detect || 'Detect Disease', icon: Scan },
     { id: 'dashboard', label: t.nav.dashboard || 'Dashboard', icon: LayoutDashboard },
-    { id: 'weather', label: t.nav.weather || 'Weather Advisory', icon: CloudRain },
+    { id: 'advisor', label: t.nav.pesticideAdvisor || 'Pesticide & Subsidy Advisor', icon: ShieldCheck },
     { id: 'calendar', label: t.nav.calendar || 'Crop Calendar', icon: Calendar },
     { id: 'about', label: t.nav.about || 'About', icon: Info },
     { id: 'contact', label: t.nav.contact || 'Contact', icon: PhoneCall },
