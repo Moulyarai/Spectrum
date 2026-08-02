@@ -27,7 +27,7 @@ const Features = ({ onNavigate }) => {
       title: 'Instant Disease Detection',
       description: 'Identifies blight, rust, mildew, leaf spot, and pest infestations across 30+ crop varieties in under one second.',
       color: 'teal',
-      actionText: 'Try Disease Scanner'
+      actionText: 'Try Disease Detection'
     },
     {
       id: 'treatment-recommendations',

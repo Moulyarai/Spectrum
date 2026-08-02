@@ -197,7 +197,7 @@ const DashboardPage = ({ onNavigate, currentLang }) => {
                   onClick={() => onNavigate('detect')}
                   className="w-full py-2.5 rounded-xl bg-emerald-500 text-emerald-950 font-bold text-xs hover:bg-emerald-400 transition-colors"
                 >
-                  Launch AI Disease Scanner
+                  Open Disease Detection
                 </button>
               </div>
             </div>

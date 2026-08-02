@@ -94,7 +94,7 @@ const HowItWorks = ({ onNavigate }) => {
             onClick={() => onNavigate('detect')}
             className="px-6 py-3.5 rounded-xl bg-white text-emerald-950 hover:bg-emerald-50 font-bold text-sm shadow-md transition-all cursor-pointer whitespace-nowrap"
           >
-            Start Leaf Scanner Now
+            Start Disease Detection
           </button>
         </div>
 
